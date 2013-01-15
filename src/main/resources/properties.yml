@@ -1,0 +1,8 @@
+name: UltraWGEN
+version: ${version}
+description: ${project.description}
+author: [ croxis ]
+depends: [Vanilla]
+main: net.croxis.plugins.UltraWGEN
+load: STARTUP
+platform: SERVER
