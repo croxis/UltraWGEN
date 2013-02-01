@@ -18,57 +18,43 @@
  */
 package net.croxis.plugins;
 
-import java.util.Random;
-
-import org.spout.api.Spout;
 import org.spout.api.generator.GeneratorPopulator;
 import org.spout.api.generator.Populator;
-import org.spout.api.generator.WorldGenerator;
-import org.spout.api.generator.biome.BiomeGenerator;
-import org.spout.api.generator.biome.BiomeManager;
-import org.spout.api.generator.biome.BiomePopulator;
 import org.spout.api.generator.biome.BiomeSelector;
 import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
 import org.spout.api.geo.discrete.Point;
-import org.spout.api.util.LogicUtil;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 import org.spout.vanilla.plugin.material.VanillaMaterials;
 import org.spout.vanilla.plugin.material.block.Liquid;
-import org.spout.vanilla.plugin.world.generator.VanillaBiomeGenerator;
 import org.spout.vanilla.plugin.world.generator.VanillaGenerator;
 import org.spout.vanilla.plugin.world.generator.VanillaGenerators;
-import org.spout.vanilla.plugin.world.generator.biome.VanillaBiomes;
 import org.spout.vanilla.plugin.world.generator.normal.NormalGenerator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.CavePopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.DungeonPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.FallingLiquidPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.GroundCoverPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.MineshaftPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.OrePopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.PondPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.RavinePopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.RockyShieldPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.SnowPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.StrongholdPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.TemplePopulator;
 
 public class UltraGenerator implements VanillaGenerator{
-	
+	private NewNetherGenerator nether = new NewNetherGenerator();
+	private NormalGenerator normal = new NormalGenerator();
 
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX,
 			int chunkY, int chunkZ, World world) {
-		if (chunkY < -8)
+		System.out.println("Starting Chunk: " 
+				+ Integer.toString(chunkX) + ", " 
+				+ Integer.toString(chunkY) + ", "
+				+ Integer.toString(chunkZ) + ". Size: "
+				+ blockData.getSize().toString());
+		if (chunkY == -16){
+			nether.generate(blockData, chunkX, chunkY, chunkZ, world);
+		} else if (chunkY >= 0 && chunkY <= 32) {
+			System.out.println("Normalgen: " + normal.toString());
+			System.out.println("Externalgen: " + VanillaGenerators.NORMAL.toString());
+			//normal.generate(blockData, chunkX, chunkY, chunkZ, world);
 			VanillaGenerators.NORMAL.generate(blockData, chunkX, chunkY, chunkZ, world);
-		else if (chunkY == -8 && chunkY < 0)
-			VanillaGenerators.NETHER.generate(blockData, chunkX, chunkY+8, chunkZ, world);
-		//else
-		//	VanillaGenerators.NORMAL.generate(blockData, chunkX, chunkY, chunkZ, world);
+		}
 		
-		
-		//VanillaGenerators.NETHER.generate(blockData, chunkX, chunkY, chunkZ, world);
-		//VanillaGenerators.NORMAL.generate(blockData, chunkX, chunkY, chunkZ, world);
-		//((Vanilla) Spout.getPluginManager().getPlugin("Vanilla"));
+		System.out.println("Ending Chunk: " 
+				+ Integer.toString(chunkX) + ", " 
+				+ Integer.toString(chunkY) + ", "
+				+ Integer.toString(chunkZ));
 		
 	}
 
@@ -99,18 +85,18 @@ public class UltraGenerator implements VanillaGenerator{
 	}
 
 	public Populator[] getPopulators() {
-		// TODO Auto-generated method stub
-		
-		return null;
+		//return VanillaGenerators.NORMAL.getPopulators();
+		return new Populator[0];
 	}
 
 	public GeneratorPopulator[] getGeneratorPopulators() {
-		// TODO Auto-generated method stub
-		return null;
+		//return VanillaGenerators.NORMAL.getGeneratorPopulators();
+		return new GeneratorPopulator[0];
 	}
 
 	public Point getSafeSpawn(World world) {
-		short shift = 0;
+		return new Point(world, 0, 0 + 3, 0);
+		/*short shift = 0;
 		final BiomeSelector selector = getSelector();
 		while (LogicUtil.equalsAny(selector.pickBiome(shift, 0, world.getSeed()),
 		VanillaBiomes.OCEAN, VanillaBiomes.BEACH, VanillaBiomes.RIVER,
@@ -127,7 +113,7 @@ public class UltraGenerator implements VanillaGenerator{
 		return new Point(world, x, y + 0.5f, z);
 		}
 		}
-		return new Point(world, shift, 80, 0);
+		return new Point(world, shift, 80, 0);*/
 	}
 
 	private BiomeSelector getSelector() {

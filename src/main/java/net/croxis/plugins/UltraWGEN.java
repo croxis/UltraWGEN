@@ -21,8 +21,22 @@ package net.croxis.plugins;
 import java.util.Set;
 
 import org.spout.api.UnsafeMethod;
+import org.spout.api.chat.ChatArguments;
+import org.spout.api.chat.style.ChatStyle;
+import org.spout.api.command.CommandContext;
+import org.spout.api.command.CommandRegistrationsFactory;
+import org.spout.api.command.CommandSource;
+import org.spout.api.command.RootCommand;
+import org.spout.api.command.annotated.AnnotatedCommandRegistrationFactory;
+import org.spout.api.command.annotated.Command;
+import org.spout.api.command.annotated.CommandPermissions;
+import org.spout.api.command.annotated.SimpleAnnotatedCommandExecutorFactory;
+import org.spout.api.command.annotated.SimpleInjector;
 import org.spout.api.component.impl.ObserverComponent;
 import org.spout.api.entity.Entity;
+import org.spout.api.entity.Player;
+import org.spout.api.exception.CommandException;
+import org.spout.api.exception.ConfigurationException;
 import org.spout.api.generator.GeneratorPopulator;
 import org.spout.api.generator.biome.Biome;
 import org.spout.api.geo.LoadOption;
@@ -33,6 +47,7 @@ import org.spout.api.geo.discrete.Transform;
 import org.spout.api.math.Quaternion;
 import org.spout.api.math.Vector3;
 import org.spout.api.plugin.CommonPlugin;
+import org.spout.api.plugin.PluginLogger;
 import org.spout.api.plugin.ServiceManager;
 import org.spout.api.plugin.services.ProtectionService;
 import org.spout.api.util.FlatIterator;
@@ -51,27 +66,36 @@ import org.spout.vanilla.plugin.service.protection.SpawnProtection;
 import org.spout.vanilla.plugin.thread.SpawnLoader;
 import org.spout.vanilla.plugin.world.generator.VanillaGenerator;
 import org.spout.vanilla.plugin.world.generator.VanillaGenerators;
+import org.spout.vanilla.plugin.world.generator.nether.NetherGenerator;
 
 public class UltraWGEN extends CommonPlugin{
-	private static final int LOADER_THREAD_COUNT = 8;
+	private static final int LOADER_THREAD_COUNT = 16;
 	
 
 	@Override
 	@UnsafeMethod
 	public void onEnable() {
-		VanillaPlugin vanilla = (VanillaPlugin) this.getEngine().getPluginManager().getPlugin("Vanilla");
-		World world = this.getEngine().loadWorld("world", new UltraGenerator());
+		final CommandRegistrationsFactory<Class<?>> commandRegFactory = new AnnotatedCommandRegistrationFactory(new SimpleInjector(this), new SimpleAnnotatedCommandExecutorFactory());
+		final RootCommand root = getEngine().getRootCommand();
+		root.addSubCommands(this, DebugCommands.class, commandRegFactory);
 		
-		WorldConfigurationNode worldNode = VanillaConfiguration.WORLDS.get("world");
+		World world = this.getEngine().loadWorld("world_test", new UltraGenerator());
+		
+		WorldConfigurationNode worldNode = VanillaConfiguration.WORLDS.get("world_test");
+		try {
+			worldNode.load();
+		} catch (ConfigurationException e1) {
+			e1.printStackTrace();
+		}
 
 		world.getDataMap().put(VanillaData.GAMEMODE, GameMode.get(worldNode.GAMEMODE.getString()));
 		world.getDataMap().put(VanillaData.DIFFICULTY, Difficulty.get(worldNode.DIFFICULTY.getString()));
 		world.getDataMap().put(VanillaData.DIMENSION, Dimension.get(worldNode.SKY_TYPE.getString()));
 
 		world.addLightingManager(VanillaLighting.BLOCK_LIGHT);
-		world.addLightingManager(VanillaLighting.BLOCK_LIGHT);
+		world.addLightingManager(VanillaLighting.SKY_LIGHT);
 		
-		this.getEngine().setDefaultWorld(world);
+		//this.getEngine().setDefaultWorld(world);
 		
 		final int radius = VanillaConfiguration.SPAWN_RADIUS.getInt();
 		final int protectionRadius = VanillaConfiguration.SPAWN_PROTECTION_RADIUS.getInt();
@@ -113,7 +137,9 @@ public class UltraWGEN extends CommonPlugin{
 	}
 	
 	public void onLoad(){
+		((PluginLogger) getLogger()).setTag(new ChatArguments(ChatStyle.RESET, "[", ChatStyle.GOLD, "UltraWGEN", ChatStyle.RESET, "] "));
 		//Remove bedrock from vanilla here
+		//NetherGenerator.HEIGHT = 256;
 		//GeneratorPopulator[] populators = VanillaGenerators.NORMAL.getGeneratorPopulators();
 	}
 
@@ -122,6 +148,12 @@ public class UltraWGEN extends CommonPlugin{
 	public void onDisable() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+
+	
+	public ChatArguments getPrefix() {
+		return ((PluginLogger) getLogger()).getTag();
 	}
 
 }
