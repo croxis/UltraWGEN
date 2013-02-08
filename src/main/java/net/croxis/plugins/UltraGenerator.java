@@ -33,7 +33,7 @@ import org.spout.vanilla.plugin.world.generator.normal.NormalGenerator;
 
 public class UltraGenerator implements VanillaGenerator{
 	private NewNetherGenerator nether = new NewNetherGenerator();
-	private NormalGenerator normal = new NormalGenerator();
+	public NewNormalGenerator normal = new NewNormalGenerator();
 
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX,
 			int chunkY, int chunkZ, World world) {
@@ -47,8 +47,8 @@ public class UltraGenerator implements VanillaGenerator{
 		} else if (chunkY >= 0 && chunkY <= 32) {
 			System.out.println("Normalgen: " + normal.toString());
 			System.out.println("Externalgen: " + VanillaGenerators.NORMAL.toString());
-			//normal.generate(blockData, chunkX, chunkY, chunkZ, world);
-			VanillaGenerators.NORMAL.generate(blockData, chunkX, chunkY, chunkZ, world);
+			//VanillaGenerators.NORMAL.generate(blockData, chunkX, 0, chunkZ, world);
+			normal.generate(blockData, chunkX, chunkY, chunkZ, world);
 		}
 		
 		System.out.println("Ending Chunk: " 
@@ -95,7 +95,8 @@ public class UltraGenerator implements VanillaGenerator{
 	}
 
 	public Point getSafeSpawn(World world) {
-		return new Point(world, 0, 0 + 3, 0);
+		//return new Point(world, 0, 0 + 3, 0);
+		return normal.getSafeSpawn(world);
 		/*short shift = 0;
 		final BiomeSelector selector = getSelector();
 		while (LogicUtil.equalsAny(selector.pickBiome(shift, 0, world.getSeed()),
