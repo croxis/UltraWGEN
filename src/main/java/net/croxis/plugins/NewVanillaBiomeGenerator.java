@@ -24,7 +24,6 @@ import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 import org.spout.vanilla.plugin.world.generator.VanillaGenerator;
 
 public abstract class NewVanillaBiomeGenerator extends BiomeGenerator implements VanillaGenerator {
-	private boolean voidBellowZero;
 
 	@Override
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX, int chunkY, int chunkZ, World world) {
@@ -32,7 +31,7 @@ public abstract class NewVanillaBiomeGenerator extends BiomeGenerator implements
 	}
 	
 	protected void hasVoidBellowZero(boolean voidBellowZero) {
-		this.voidBellowZero = false;
+		return;
 	}
 
 }

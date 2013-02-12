@@ -69,7 +69,7 @@ public class UltraWGEN extends CommonPlugin{
 		System.out.println("Phase 1");
 		UltraGenerator gen = new UltraGenerator();
 		World world = this.getEngine().loadWorld("world_test", new UltraGenerator());
-		World world_normal = this.getEngine().loadWorld("world_test2", gen.normal);
+		//World world_normal = this.getEngine().loadWorld("world_test2", gen.normal);
 		
 		WorldConfigurationNode worldNode = VanillaConfiguration.WORLDS.get("world_test");
 		try {
@@ -105,7 +105,7 @@ public class UltraWGEN extends CommonPlugin{
 			// Load or generate spawn area
 			int effectiveRadius = newWorld ? (2 * radius) : radius;
 			System.out.println("Phase 6.2");
-			loader.load(world_normal, cx, cz, effectiveRadius, newWorld);
+			//loader.load(world_normal, cx, cz, effectiveRadius, newWorld);
 			System.out.println("Phase 6.3");
 			loader.load(world, cx, cz, effectiveRadius, newWorld);
 			System.out.println("Phase 7");

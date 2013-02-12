@@ -90,7 +90,7 @@ import org.spout.vanilla.plugin.world.generator.normal.populator.SnowPopulator;
 import org.spout.vanilla.plugin.world.generator.normal.populator.StrongholdPopulator;
 import org.spout.vanilla.plugin.world.generator.normal.populator.TemplePopulator;
 
-public class NewNormalGenerator extends NewVanillaBiomeGenerator {
+public class NewVanillaNormalGenerator extends NewVanillaBiomeGenerator {
 	// world constants
 	public static final int HEIGHT;
 	public static final int SEA_LEVEL = 62;
@@ -159,8 +159,9 @@ public class NewNormalGenerator extends NewVanillaBiomeGenerator {
 		register(VanillaBiomes.TAIGA_HILLS);
 	}
 
+
 	public String getName() {
-		return "NewVanillaNormal";
+		return "VanillaNormal";
 	}
 
 	@Override
