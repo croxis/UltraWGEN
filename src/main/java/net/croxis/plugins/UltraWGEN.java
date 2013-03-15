@@ -67,7 +67,7 @@ public class UltraWGEN extends CommonPlugin{
 		final RootCommand root = getEngine().getRootCommand();
 		root.addSubCommands(this, DebugCommands.class, commandRegFactory);
 		System.out.println("Phase 1");
-		UltraGenerator gen = new UltraGenerator();
+		//UltraGenerator gen = new UltraGenerator();
 		World world = this.getEngine().loadWorld("world_test", new UltraGenerator());
 		//World world_normal = this.getEngine().loadWorld("world_test2", gen.normal);
 		
@@ -110,6 +110,7 @@ public class UltraWGEN extends CommonPlugin{
 			loader.load(world, cx, cz, effectiveRadius, newWorld);
 			System.out.println("Phase 7");
 			if (worldConfig.LOADED_SPAWN.getBoolean()) {
+				@SuppressWarnings("unchecked")
 				Entity e = world.createAndSpawnEntity(point, LoadOption.LOAD_GEN, ObserverComponent.class);
 				e.setObserver(new FlatIterator(cx, 0, cz, 16, effectiveRadius));
 			}

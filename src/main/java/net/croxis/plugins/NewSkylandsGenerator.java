@@ -43,7 +43,6 @@ import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 import org.spout.vanilla.material.VanillaMaterials;
 import org.spout.vanilla.material.block.Liquid;
 import org.spout.vanilla.world.generator.biome.VanillaBiomes;
-import org.spout.vanilla.world.generator.biome.VanillaSingleBiomeGenerator;
 import org.spout.vanilla.world.generator.normal.object.OreObject.OreType;
 import org.spout.vanilla.world.generator.normal.populator.GroundCoverPopulator;
 import org.spout.vanilla.world.generator.normal.populator.OrePopulator;
