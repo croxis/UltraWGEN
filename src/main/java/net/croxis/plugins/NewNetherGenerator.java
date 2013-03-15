@@ -58,12 +58,14 @@ import org.spout.api.geo.cuboid.Chunk;
 import org.spout.api.geo.discrete.Point;
 import org.spout.api.math.Vector3;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
+import org.spout.vanilla.material.VanillaMaterials;
+import org.spout.vanilla.material.block.Liquid;
+import org.spout.vanilla.protocol.VanillaNetworkSynchronizer;
+import org.spout.vanilla.world.generator.biome.VanillaBiomes;
+import org.spout.vanilla.world.generator.nether.populator.BlockPatchPopulator;
+import org.spout.vanilla.world.generator.nether.populator.NetherCavePopulator;
 
-import org.spout.vanilla.plugin.material.VanillaMaterials;
-import org.spout.vanilla.plugin.material.block.Liquid;
-import org.spout.vanilla.plugin.world.generator.biome.VanillaBiomes;
-import org.spout.vanilla.plugin.world.generator.nether.populator.BlockPatchPopulator;
-import org.spout.vanilla.plugin.world.generator.nether.populator.NetherCavePopulator;
+
 
 public class NewNetherGenerator extends NewVanillaSingleBiomeGenerator {
 	// numeric constants
@@ -93,7 +95,6 @@ public class NewNetherGenerator extends NewVanillaSingleBiomeGenerator {
 
 	public NewNetherGenerator() {
 		super(VanillaBiomes.NETHERRACK);
-		this.hasVoidBellowZero(false);
 	}
 
 	@Override
@@ -117,7 +118,6 @@ public class NewNetherGenerator extends NewVanillaSingleBiomeGenerator {
 		final int sizeY = MathHelper.clamp(size.getFloorY(), 0, HEIGHT);
 		final int sizeZ = size.getFloorZ();
 		final double[][][] noise = WorldGeneratorUtils.fastNoise(NOISE, sizeX, sizeY, sizeZ, 4, x, y, z);
-		final Random random = WorldGeneratorUtils.getRandom(seed, x, y, z, 6516);
 		for (int xx = 0; xx < sizeX; xx++) {
 			for (int yy = 0; yy < sizeY; yy++) {
 				for (int zz = 0; zz < sizeZ; zz++) {
@@ -178,8 +178,8 @@ public class NewNetherGenerator extends NewVanillaSingleBiomeGenerator {
 	public Point getSafeSpawn(World world) {
 		final Random random = new Random();
 		for (byte attempts = 0; attempts < 32; attempts++) {
-			final int x = random.nextInt(256) - 127;
-			final int z = random.nextInt(256) - 127;
+			final int x = random.nextInt(256);
+			final int z = random.nextInt(256);
 			final int y = getHighestSolidBlock(world, x, z);
 			if (y != -1) {
 				return new Point(world, x, y + 0.5f, z);
@@ -203,7 +203,7 @@ public class NewNetherGenerator extends NewVanillaSingleBiomeGenerator {
 	}
 
 	public int[][] getSurfaceHeight(World world, int chunkX, int chunkZ) {
-		int height = world.getHeight() - 1;
+		int height = VanillaNetworkSynchronizer.WORLD_HEIGHT - 1;
 		int[][] heights = new int[Chunk.BLOCKS.SIZE][Chunk.BLOCKS.SIZE];
 		for (int x = 0; x < Chunk.BLOCKS.SIZE; x++) {
 			for (int z = 0; z < Chunk.BLOCKS.SIZE; z++) {

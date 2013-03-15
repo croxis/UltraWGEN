@@ -25,8 +25,8 @@ import org.spout.api.generator.biome.Simple2DBiomeManager;
 import org.spout.api.generator.biome.selector.PerBlockBiomeSelector;
 import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
+import org.spout.vanilla.world.generator.biome.VanillaBiome;
 
-import org.spout.vanilla.api.world.generator.biome.VanillaBiome;
 
 public abstract class NewVanillaSingleBiomeGenerator extends NewVanillaBiomeGenerator{
 	private final VanillaBiome biome;

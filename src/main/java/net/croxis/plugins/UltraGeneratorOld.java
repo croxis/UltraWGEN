@@ -25,11 +25,11 @@ import org.spout.api.geo.World;
 import org.spout.api.geo.cuboid.Chunk;
 import org.spout.api.geo.discrete.Point;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
-import org.spout.vanilla.plugin.material.VanillaMaterials;
-import org.spout.vanilla.plugin.material.block.Liquid;
-import org.spout.vanilla.plugin.world.generator.VanillaGenerator;
-import org.spout.vanilla.plugin.world.generator.VanillaGenerators;
-import org.spout.vanilla.plugin.world.generator.normal.NormalGenerator;
+import org.spout.vanilla.material.VanillaMaterials;
+import org.spout.vanilla.material.block.Liquid;
+import org.spout.vanilla.world.generator.VanillaGenerator;
+import org.spout.vanilla.world.generator.VanillaGenerators;
+import org.spout.vanilla.world.generator.normal.NormalGenerator;
 
 public class UltraGeneratorOld implements VanillaGenerator{
 	private NewNetherGenerator nether = new NewNetherGenerator();
@@ -70,7 +70,7 @@ public class UltraGeneratorOld implements VanillaGenerator{
 	}
 	
 	private int getHighestSolidBlock(World world, int x, int z) {
-		int y = world.getHeight() - 1;
+		int y = 256 - 1;
 		while (world.getBlockMaterial(x, y, z) == VanillaMaterials.AIR) {
 			y--;
 			if (y == 0 || world.getBlockMaterial(x, y, z) instanceof Liquid) {

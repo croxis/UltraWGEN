@@ -21,17 +21,36 @@ package net.croxis.plugins;
 import org.spout.api.generator.biome.BiomeGenerator;
 import org.spout.api.geo.World;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
-import org.spout.vanilla.plugin.world.generator.VanillaGenerator;
+import org.spout.vanilla.material.VanillaMaterials;
+import org.spout.vanilla.world.generator.VanillaGenerator;
 
 public abstract class NewVanillaBiomeGenerator extends BiomeGenerator implements VanillaGenerator {
 
+	private int lowestChunkY = 0;
+	private int highestChunkY = 15;
+
 	@Override
 	public void generate(CuboidBlockMaterialBuffer blockData, int chunkX, int chunkY, int chunkZ, World world) {
-		super.generate(blockData, chunkX, chunkY, chunkZ, world);
-	}
-	
-	protected void hasVoidBellowZero(boolean voidBellowZero) {
-		return;
+		if (chunkY < lowestChunkY || chunkY > highestChunkY) {
+			blockData.flood(VanillaMaterials.AIR);
+		} else {
+			super.generate(blockData, chunkX, chunkY, chunkZ, world);
+		}
 	}
 
+	public int getLowestChunkY() {
+		return lowestChunkY;
+	}
+
+	public void setLowestChunkY(int lowestChunkY) {
+		this.lowestChunkY = lowestChunkY;
+	}
+
+	public int getHighestChunkY() {
+		return highestChunkY;
+	}
+
+	public void setHighestChunkY(int highestChunkY) {
+		this.highestChunkY = highestChunkY;
+	}
 }

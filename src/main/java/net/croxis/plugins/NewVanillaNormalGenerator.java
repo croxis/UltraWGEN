@@ -68,31 +68,30 @@ import org.spout.api.util.LogicUtil;
 import org.spout.api.util.cuboid.CuboidBlockMaterialBuffer;
 import org.spout.api.util.map.TIntPairObjectHashMap;
 
-import org.spout.vanilla.api.data.Climate;
-import org.spout.vanilla.api.world.generator.biome.VanillaBiome;
-
-import org.spout.vanilla.plugin.material.VanillaMaterials;
-import org.spout.vanilla.plugin.material.block.Liquid;
-import org.spout.vanilla.plugin.world.generator.biome.VanillaBiomeGenerator;
-import org.spout.vanilla.plugin.world.generator.biome.VanillaBiomes;
-import org.spout.vanilla.plugin.world.generator.normal.biome.NormalBiome;
-import org.spout.vanilla.plugin.world.generator.normal.biome.selector.WhittakerLayer;
-import org.spout.vanilla.plugin.world.generator.normal.populator.CavePopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.DungeonPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.FallingLiquidPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.GroundCoverPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.MineshaftPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.OrePopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.PondPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.RavinePopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.RockyShieldPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.SnowPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.StrongholdPopulator;
-import org.spout.vanilla.plugin.world.generator.normal.populator.TemplePopulator;
+import org.spout.vanilla.data.Climate;
+import org.spout.vanilla.material.VanillaMaterials;
+import org.spout.vanilla.material.block.Liquid;
+import org.spout.vanilla.world.generator.biome.VanillaBiome;
+import org.spout.vanilla.world.generator.biome.VanillaBiomeGenerator;
+import org.spout.vanilla.world.generator.biome.VanillaBiomes;
+import org.spout.vanilla.world.generator.normal.biome.NormalBiome;
+import org.spout.vanilla.world.generator.normal.biome.selector.WhittakerLayer;
+import org.spout.vanilla.world.generator.normal.populator.CavePopulator;
+import org.spout.vanilla.world.generator.normal.populator.DungeonPopulator;
+import org.spout.vanilla.world.generator.normal.populator.FallingLiquidPopulator;
+import org.spout.vanilla.world.generator.normal.populator.GroundCoverPopulator;
+import org.spout.vanilla.world.generator.normal.populator.MineshaftPopulator;
+import org.spout.vanilla.world.generator.normal.populator.OrePopulator;
+import org.spout.vanilla.world.generator.normal.populator.PondPopulator;
+import org.spout.vanilla.world.generator.normal.populator.RavinePopulator;
+import org.spout.vanilla.world.generator.normal.populator.RockyShieldPopulator;
+import org.spout.vanilla.world.generator.normal.populator.SnowPopulator;
+import org.spout.vanilla.world.generator.normal.populator.StrongholdPopulator;
+import org.spout.vanilla.world.generator.normal.populator.TemplePopulator;
 
 public class NewVanillaNormalGenerator extends NewVanillaBiomeGenerator {
 	// world constants
-	public static final int HEIGHT;
+	public static final int HEIGHT = 256;
 	public static final int SEA_LEVEL = 62;
 	private static final byte BEDROCK_DEPTH = 5;
 	// noise for generation
@@ -120,7 +119,6 @@ public class NewVanillaNormalGenerator extends NewVanillaBiomeGenerator {
 			}
 			height = Math.max(height, (int) Math.ceil(((NormalBiome) biome).getMaxElevation()));
 		}
-		HEIGHT = (++height / 4) * 4 + 4;
 	}
 
 	@Override
@@ -260,7 +258,7 @@ public class NewVanillaNormalGenerator extends NewVanillaBiomeGenerator {
 	}
 
 	private int getHighestSolidBlock(World world, int x, int z) {
-		int y = world.getHeight() - 1;
+		int y = HEIGHT - 1;
 		while (world.getBlockMaterial(x, y, z) == VanillaMaterials.AIR) {
 			if (--y == 0 || world.getBlockMaterial(x, y, z) instanceof Liquid) {
 				return -1;

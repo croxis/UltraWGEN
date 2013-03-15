@@ -42,18 +42,18 @@ import org.spout.api.plugin.ServiceManager;
 import org.spout.api.plugin.services.ProtectionService;
 import org.spout.api.util.FlatIterator;
 
-import org.spout.vanilla.api.data.Difficulty;
-import org.spout.vanilla.api.data.Dimension;
-import org.spout.vanilla.api.data.GameMode;
-import org.spout.vanilla.api.data.VanillaData;
-import org.spout.vanilla.plugin.component.world.sky.NormalSky;
-import org.spout.vanilla.plugin.configuration.VanillaConfiguration;
-import org.spout.vanilla.plugin.configuration.WorldConfigurationNode;
-import org.spout.vanilla.plugin.lighting.VanillaLighting;
-import org.spout.vanilla.plugin.service.VanillaProtectionService;
-import org.spout.vanilla.plugin.service.protection.SpawnProtection;
-import org.spout.vanilla.plugin.thread.SpawnLoader;
-import org.spout.vanilla.plugin.world.generator.VanillaGenerator;
+import org.spout.vanilla.component.world.sky.NormalSky;
+import org.spout.vanilla.data.Difficulty;
+import org.spout.vanilla.data.Dimension;
+import org.spout.vanilla.data.GameMode;
+import org.spout.vanilla.data.VanillaData;
+import org.spout.vanilla.data.configuration.VanillaConfiguration;
+import org.spout.vanilla.data.configuration.WorldConfigurationNode;
+import org.spout.vanilla.service.VanillaProtectionService;
+import org.spout.vanilla.service.protection.SpawnProtection;
+import org.spout.vanilla.util.thread.SpawnLoader;
+import org.spout.vanilla.world.generator.VanillaGenerator;
+import org.spout.vanilla.world.lighting.VanillaLighting;
 
 public class UltraWGEN extends CommonPlugin{
 	private static final int LOADER_THREAD_COUNT = 16;
@@ -63,7 +63,7 @@ public class UltraWGEN extends CommonPlugin{
 	@UnsafeMethod
 	public void onEnable() {
 		System.out.println("Phase 1");
-		final CommandRegistrationsFactory<Class<?>> commandRegFactory = new AnnotatedCommandRegistrationFactory(new SimpleInjector(this), new SimpleAnnotatedCommandExecutorFactory());
+		final CommandRegistrationsFactory<Class<?>> commandRegFactory = new AnnotatedCommandRegistrationFactory(getEngine(), new SimpleInjector(this), new SimpleAnnotatedCommandExecutorFactory());
 		final RootCommand root = getEngine().getRootCommand();
 		root.addSubCommands(this, DebugCommands.class, commandRegFactory);
 		System.out.println("Phase 1");
@@ -78,9 +78,9 @@ public class UltraWGEN extends CommonPlugin{
 			e1.printStackTrace();
 		}
 		System.out.println("Phase 3");
-		world.getDataMap().put(VanillaData.GAMEMODE, GameMode.get(worldNode.GAMEMODE.getString()));
-		world.getDataMap().put(VanillaData.DIFFICULTY, Difficulty.get(worldNode.DIFFICULTY.getString()));
-		world.getDataMap().put(VanillaData.DIMENSION, Dimension.get(worldNode.SKY_TYPE.getString()));
+		world.getData().put(VanillaData.GAMEMODE, GameMode.get(worldNode.GAMEMODE.getString()));
+		world.getData().put(VanillaData.DIFFICULTY, Difficulty.get(worldNode.DIFFICULTY.getString()));
+		world.getData().put(VanillaData.DIMENSION, Dimension.get(worldNode.SKY_TYPE.getString()));
 
 		world.addLightingManager(VanillaLighting.BLOCK_LIGHT);
 		world.addLightingManager(VanillaLighting.SKY_LIGHT);
@@ -110,7 +110,7 @@ public class UltraWGEN extends CommonPlugin{
 			loader.load(world, cx, cz, effectiveRadius, newWorld);
 			System.out.println("Phase 7");
 			if (worldConfig.LOADED_SPAWN.getBoolean()) {
-				Entity e = world.createAndSpawnEntity(point, ObserverComponent.class, LoadOption.LOAD_GEN);
+				Entity e = world.createAndSpawnEntity(point, LoadOption.LOAD_GEN, ObserverComponent.class);
 				e.setObserver(new FlatIterator(cx, 0, cz, 16, effectiveRadius));
 			}
 	
@@ -126,7 +126,7 @@ public class UltraWGEN extends CommonPlugin{
 				world.setSpawnPoint(new Transform(spawn, Quaternion.IDENTITY, Vector3.ONE));
 			}
 		}
-		world.getComponentHolder().add(NormalSky.class);
+		world.add(NormalSky.class);
 		
 	}
 	
